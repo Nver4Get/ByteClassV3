@@ -16,6 +16,9 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.net.URI;
+import javax.swing.table.TableColumn;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.JTable;
 
 /**
  *
@@ -23,12 +26,87 @@ import java.net.URI;
  */
 public class CoursePage extends javax.swing.JFrame {
 
+    private DefaultTableModel tableModel;
+
     /**
      * Creates new form UserDashboard
      */
     public CoursePage() {
         initComponents();
+        Koneksi c = new Koneksi();
+        initializeTableModel(); // Inisialisasi model tabel
+        loadCourses();
     }
+
+    private void initializeTableModel() {
+        // Inisialisasi model tabel dan set ke tblCourse
+        tableModel = new DefaultTableModel();
+        tableModel.addColumn("ID");
+        tableModel.addColumn("Category ID");
+        tableModel.addColumn("Course Name");
+        tableModel.addColumn("Course Material");
+        tableModel.addColumn("Link");
+        dataClass.setModel(tableModel);
+    }
+
+    public void loadCourses() {
+        // Kosongkan tabel sebelum mengisi data baru
+        tableModel.setRowCount(0);
+
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/byteclass", "root", ""); PreparedStatement pst = conn.prepareStatement("SELECT * FROM courses"); ResultSet rs = pst.executeQuery()) {
+
+            while (rs.next()) {
+                Object[] data = {
+                    rs.getInt("id"),
+                    rs.getString("id_category"),
+                    rs.getString("course_name"),
+                    rs.getString("course_material"),
+                    rs.getString("link") // Link yang akan ditampilkan
+                };
+                tableModel.addRow(data);
+            }
+
+            // Menambahkan renderer khusus untuk kolom link
+            TableColumn linkColumn = dataClass.getColumnModel().getColumn(4); // Kolom ke-5 untuk link
+            linkColumn.setCellRenderer(new CoursePage.LinkCellRenderer());
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+        }
+    }
+
+    class LinkCellRenderer extends DefaultTableCellRenderer {
+    @Override
+    public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        JLabel label = new JLabel();
+        
+        // Check if the value is null before invoking toString()
+        if (value != null) {
+            label.setText("<html><a href=''>" + value.toString() + "</a></html>");  // Create link text
+        } else {
+            label.setText("<html>No Link</html>");  // Fallback text for null value
+        }
+
+        // Adding MouseListener to detect clicks on the link
+        label.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                if (value != null) {  // Check if the value is not null
+                    try {
+                        // Open URL in default browser
+                        Desktop desktop = Desktop.getDesktop();
+                        desktop.browse(new URI(value.toString())); // Open link in browser
+                    } catch (Exception ex) {
+                        java.util.logging.Logger.getLogger(LinkCellRenderer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+
+        return label;
+    }
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -208,14 +286,13 @@ public class CoursePage extends javax.swing.JFrame {
     }//GEN-LAST:event_dataClassMouseClicked
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
-        // TODO add your handling code here:
-        String name = txtNama.getText().trim(); // Input dari txtName
+        String name = txtNama.getText().trim(); // Input dari txtNama
         String materi = txtMateri.getText().trim(); // Input dari txtMateri
 
         // Menyiapkan query SQL
-        String query = "SELECT course_name, course_material, link FROM courses WHERE 1=1";
+        String query = "SELECT id, id_category, course_name, course_material, link FROM courses WHERE 1=1";
 
-        // Menambahkan kondisi berdasarkan input dari txtName dan txtMateri
+        // Menambahkan kondisi berdasarkan input dari txtNama dan txtMateri
         if (!name.isEmpty()) {
             query += " AND course_name LIKE '%" + name + "%'";
         }
@@ -235,10 +312,15 @@ public class CoursePage extends javax.swing.JFrame {
 
             // Memasukkan hasil query ke dalam tabel
             while (rs.next()) {
-                String courseName = rs.getString("course_name");
-                String courseMaterial = rs.getString("course_material");
-                String link = rs.getString("link");
-                model.addRow(new Object[]{courseName, courseMaterial, link});
+                // Ambil data dari result set sesuai dengan kolom yang benar
+                String courseId = rs.getString("id"); // ID course
+                String categoryId = rs.getString("id_category"); // ID category
+                String courseName = rs.getString("course_name"); // Nama course
+                String courseMaterial = rs.getString("course_material"); // Materi course
+                String link = rs.getString("link"); // Link
+
+                // Menambahkan baris baru ke model dengan data yang benar
+                model.addRow(new Object[]{courseId, categoryId, courseName, courseMaterial, link});
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -251,7 +333,7 @@ public class CoursePage extends javax.swing.JFrame {
         txtMateri.setText("");
 
         // Menyiapkan query untuk menampilkan semua data
-        String query = "SELECT course_name, course_material, link FROM courses";
+        String query = "SELECT id, id_category, course_name, course_material, link FROM courses WHERE 1=1";
 
         // Menyiapkan model untuk JTable
         DefaultTableModel model = (DefaultTableModel) dataClass.getModel();
@@ -265,10 +347,14 @@ public class CoursePage extends javax.swing.JFrame {
 
             // Memasukkan semua data ke dalam tabel
             while (rs.next()) {
-                String courseName = rs.getString("course_name");
-                String courseMaterial = rs.getString("course_material");
-                String link = rs.getString("link");
-                model.addRow(new Object[]{courseName, courseMaterial, link});
+                 String courseId = rs.getString("id"); // ID course
+                String categoryId = rs.getString("id_category"); // ID category
+                String courseName = rs.getString("course_name"); // Nama course
+                String courseMaterial = rs.getString("course_material"); // Materi course
+                String link = rs.getString("link"); // Link
+
+                // Menambahkan baris baru ke model dengan data yang benar
+                model.addRow(new Object[]{courseId, categoryId, courseName, courseMaterial, link});
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -279,7 +365,7 @@ public class CoursePage extends javax.swing.JFrame {
         // TODO add your handling code here:
         UserDashboard user = new UserDashboard();
         user.setVisible(true);
-        
+
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 

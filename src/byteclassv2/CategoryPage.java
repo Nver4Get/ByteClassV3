@@ -26,7 +26,7 @@ public class CategoryPage extends javax.swing.JFrame {
     public CategoryPage() {
         initComponents();
         Koneksi c = new Koneksi();
-
+        showCategory();
     }
 
     private void clearFields() {
@@ -83,7 +83,7 @@ public class CategoryPage extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setText("DASHBOARD");
+        jLabel1.setText("CATEGORY DASHBOARD");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("ADD CATEGORY");
@@ -155,28 +155,26 @@ public class CategoryPage extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jButton2)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel1)
-                            .addGap(219, 219, 219))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(27, 27, 27)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(btnEdit)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(btnDelete)
-                                    .addGap(32, 32, 32)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton2)
+                        .addGap(122, 122, 122)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnEdit)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnDelete)
+                                .addGap(32, 32, 32))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(162, 162, 162)
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -235,17 +233,6 @@ String namaKategori = txtCategory.getText();  // Mengambil data dari text field
         JOptionPane.showMessageDialog(null, "Terjadi kesalahan saat menambahkan kategori!");
     }
     }//GEN-LAST:event_btnAddActionPerformed
-
-    private void tblkategoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblkategoryMouseClicked
-        // TODO add your handling code here:
-        int selectedRow = tblkategory.getSelectedRow();  // Mendapatkan baris yang dipilih di JTable
-        if (selectedRow != -1) {
-            String idCategory = tblkategory.getValueAt(selectedRow, 0).toString();  // Mendapatkan id_category
-            String namaKategori = tblkategory.getValueAt(selectedRow, 1).toString();  // Mendapatkan nama_kategori
-
-            txtCategory.setText(namaKategori);  // Menampilkan nama kategori di text field
-        }
-    }//GEN-LAST:event_tblkategoryMouseClicked
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         // TODO add your handling code here:
@@ -310,6 +297,17 @@ String namaKategori = txtCategory.getText();  // Mengambil data dari text field
         admin.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void tblkategoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblkategoryMouseClicked
+        // TODO add your handling code here:
+        int selectedRow = tblkategory.getSelectedRow();  // Mendapatkan baris yang dipilih di JTable
+        if (selectedRow != -1) {
+            String idCategory = tblkategory.getValueAt(selectedRow, 0).toString();  // Mendapatkan id_category
+            String namaKategori = tblkategory.getValueAt(selectedRow, 1).toString();  // Mendapatkan nama_kategori
+
+            txtCategory.setText(namaKategori);  // Menampilkan nama kategori di text field
+        }
+    }//GEN-LAST:event_tblkategoryMouseClicked
 //
 
     /**
