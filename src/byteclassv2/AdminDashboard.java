@@ -383,7 +383,6 @@ class LinkCellRenderer extends DefaultTableCellRenderer {
                 psCourse.setString(3, courseName);  // Memasukkan materi course
                 psCourse.setString(4, link);  // Memasukkan link
                 psCourse.executeUpdate();
-                clearFields();
 
                 JOptionPane.showMessageDialog(null, "Course berhasil ditambahkan!");
             } else {
@@ -505,7 +504,6 @@ class LinkCellRenderer extends DefaultTableCellRenderer {
                 if (result > 0) {
                     JOptionPane.showMessageDialog(this, "Course deleted successfully!");
                     loadCourses(); // Memuat ulang data kursus
-                    clearFields(); // Mengosongkan field input
                 } else {
                     JOptionPane.showMessageDialog(this, "Failed to delete course.");
                 }
